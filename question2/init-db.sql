@@ -1,0 +1,37 @@
+-- Initialize database schema for microservices application
+-- This script runs automatically when the PostgreSQL container starts
+
+-- Create users table
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create job_logs table for worker service
+CREATE TABLE IF NOT EXISTS job_logs (
+    id SERIAL PRIMARY KEY,
+    job_number INTEGER NOT NULL,
+    processed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    worker_id VARCHAR(50) NOT NULL,
+    status VARCHAR(20) DEFAULT 'completed'
+);
+
+-- Create indexes for better performance
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+CREATE INDEX IF NOT EXISTS idx_users_created_at ON users(created_at);
+CREATE INDEX IF NOT EXISTS idx_job_logs_processed_at ON job_logs(processed_at);
+CREATE INDEX IF NOT EXISTS idx_job_logs_worker_id ON job_logs(worker_id);
+
+-- Insert sample data
+INSERT INTO users (name, email) VALUES 
+    ('John Doe', 'john.doe@example.com'),
+    ('Jane Smith', 'jane.smith@example.com'),
+    ('Bob Johnson', 'bob.johnson@example.com')
+ON CONFLICT (email) DO NOTHING;
+
+-- Log initialization
+INSERT INTO job_logs (job_number, worker_id, status) VALUES 
+    (0, 'init-script', 'database_initialized')
+ON CONFLICT DO NOTHING;

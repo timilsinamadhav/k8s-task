@@ -1,0 +1,61 @@
+{{- if .Values.apiService.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "microservices-app.fullname" . }}-api
+  labels:
+    {{- include "microservices-app.apiService.labels" . | nindent 4 }}
+  {{- with .Values.apiService.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.apiService.service.type }}
+  ports:
+    - port: {{ .Values.apiService.service.port }}
+      targetPort: {{ .Values.apiService.service.targetPort }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "microservices-app.apiService.selectorLabels" . | nindent 4 }}
+---
+{{- end }}
+{{- if .Values.frontendService.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "microservices-app.fullname" . }}-frontend
+  labels:
+    {{- include "microservices-app.frontendService.labels" . | nindent 4 }}
+  {{- with .Values.frontendService.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.frontendService.service.type }}
+  ports:
+    - port: {{ .Values.frontendService.service.port }}
+      targetPort: {{ .Values.frontendService.service.targetPort }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "microservices-app.frontendService.selectorLabels" . | nindent 4 }}
+---
+{{- end }}
+{{- if .Values.database.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "microservices-app.fullname" . }}-database
+  labels:
+    {{- include "microservices-app.database.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.database.service.type }}
+  ports:
+    - port: {{ .Values.database.service.port }}
+      targetPort: {{ .Values.database.service.targetPort }}
+      protocol: TCP
+      name: postgresql
+  selector:
+    {{- include "microservices-app.database.selectorLabels" . | nindent 4 }}
+{{- end }}

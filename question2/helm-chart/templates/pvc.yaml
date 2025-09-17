@@ -1,0 +1,25 @@
+{{- if and .Values.database.enabled .Values.database.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "microservices-app.fullname" . }}-database-pvc
+  labels:
+    {{- include "microservices-app.database.labels" . | nindent 4 }}
+  {{- with .Values.database.persistence.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  accessModes:
+    - {{ .Values.database.persistence.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.database.persistence.size | quote }}
+  {{- if .Values.database.persistence.storageClass }}
+  {{- if (eq "-" .Values.database.persistence.storageClass) }}
+  storageClassName: ""
+  {{- else }}
+  storageClassName: "{{ .Values.database.persistence.storageClass }}"
+  {{- end }}
+  {{- end }}
+{{- end }}

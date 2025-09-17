@@ -1,0 +1,21 @@
+apiVersion: v2
+name: microservices-app
+description: A comprehensive Helm chart for microservices application with API, Worker, Frontend, and Database services
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - microservices
+  - nodejs
+  - python
+  - react
+  - postgresql
+home: https://github.com/timilsinamadhav/microservices-app
+sources:
+  - https://github.com/timilsinamadhav/microservices-app
+maintainers:
+  - name: DevOps Team
+    email: devops@example.com
+dependencies: []
+annotations:
+  category: Application

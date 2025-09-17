@@ -1,0 +1,15 @@
+apiVersion: v2
+name: crawler-app
+description: A Helm chart for Kubernetes crawler application with proxy usage telemetry
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - crawler
+  - proxy
+  - telemetry
+  - observability
+home: https://github.com/timilsinamadhav/crawler-proxy-telemetry
+maintainers:
+  - name: Madhav Timsina
+    email: timilsinamadhav@example.com
